@@ -1,0 +1,38 @@
+# B6 review-proofing gate config — WRITTEN BEFORE THE FINAL PASS (the B5/MAU
+# lesson). Every comparative claim the manuscript will make is declared here
+# together with the independent datasets the run itself produces.
+
+# E1: aggregate.py emits exactly these paths; the gate reads exactly these.
+stats_artifacts:
+  - stats/omnibus.json
+  - stats/posthoc.json
+
+# S1: directory holding spaces_<backend>_<dataset>.json + frozen hashes.
+data_dir: ../data
+
+# M1: pin the benchmark file hash here after the first verified download
+# (sha256sum data/NATS-tss-*); empty means "assert single hash, value unpinned".
+bench_sha256: "580fd8f3425fed9f495640b0f12ccb7744f89dec7aff263bd75aed37ab0b8bb6"
+
+# B1: comparative claims and the datasets that count as independent evidence.
+# NB201 provides three datasets inside one benchmark; CIFAR-100 and
+# ImageNet16-120 are the independent legs relative to the CIFAR-10 headline.
+# A second SEARCH SPACE (NATS-Bench size space) is the stronger external leg:
+# planned as experiment E5; if it is dropped, flip its claim to waive:true with
+# the justification below rather than deleting it.
+comparative_claims:
+  - id: "reduction_no_significant_gain_over_matched_random"
+    independent_datasets: ["cifar100", "ImageNet16-120"]
+  - id: "early_budget_gains_vanish_or_reverse_late"
+    independent_datasets: ["cifar100", "ImageNet16-120"]
+  - id: "reductions_reshuffle_budget_allocation"
+    independent_datasets: ["cifar100", "ImageNet16-120"]
+  - id: "pattern_holds_on_independent_search_space_sss"
+    independent_datasets: []
+    waive: true
+    waiver_justification: >
+      Planned robustness leg on the NATS-Bench size search space (E5). Waived
+      by default so the July/August grid is not blocked on it; if E5 runs,
+      remove the waiver and set independent_datasets to the sss dataset tokens.
+      If E5 is dropped, the manuscript's claims stay scoped to the NB201
+      topology space and this waiver documents the decision.

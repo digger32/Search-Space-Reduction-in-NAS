@@ -1,0 +1,37 @@
+{
+  "test": "friedman",
+  "treatments": [
+    "full",
+    "naswot50",
+    "no_none",
+    "param50",
+    "randM4096",
+    "randM7813",
+    "synflow50"
+  ],
+  "blocks": [
+    "ImageNet16-120|ls",
+    "ImageNet16-120|re",
+    "ImageNet16-120|reinforce",
+    "ImageNet16-120|rs",
+    "cifar10-valid|ls",
+    "cifar10-valid|re",
+    "cifar10-valid|reinforce",
+    "cifar10-valid|rs",
+    "cifar100|ls",
+    "cifar100|re",
+    "cifar100|reinforce",
+    "cifar100|rs"
+  ],
+  "statistic": 10.077496274217586,
+  "p_value": 0.12142619175055516,
+  "mean_ranks": {
+    "full": 3.4166666666666665,
+    "naswot50": 3.125,
+    "no_none": 4.25,
+    "param50": 3.6666666666666665,
+    "randM4096": 5.333333333333333,
+    "randM7813": 4.75,
+    "synflow50": 3.4583333333333335
+  }
+}

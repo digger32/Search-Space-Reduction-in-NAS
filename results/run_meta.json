@@ -1,0 +1,32 @@
+{
+  "run_started": "2026-07-18T14:28:08.877907+00:00",
+  "no_resume": true,
+  "backend": "nats",
+  "budget": 1000,
+  "block": 25,
+  "axes": {
+    "datasets": [
+      "cifar10-valid",
+      "cifar100",
+      "ImageNet16-120"
+    ],
+    "algos": [
+      "rs",
+      "re",
+      "reinforce",
+      "ls"
+    ],
+    "spaces": [
+      "full",
+      "no_none",
+      "synflow50",
+      "naswot50",
+      "param50",
+      "randM4096",
+      "randM7813"
+    ],
+    "seeds": "0-199"
+  },
+  "timeout_s": 1800,
+  "jobs": 16
+}

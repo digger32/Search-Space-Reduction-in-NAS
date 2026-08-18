@@ -1,0 +1,18 @@
+# B6 pinned environment — Server B variant (QEMU qemu64 vCPU, NO x86-64-v2).
+# numpy>=2.3 and scipy>=1.16 wheels are built with the x86-64-v2 baseline and
+# crash on import on this VM ("NumPy was built with baseline optimizations:
+# (X86_V2)") — the same issue hit the Pyrop and C1/CDEL builds. The pins below
+# are the pre-v2-baseline set, VERIFIED together on 2026-07-17: full runner
+# chain (spaces -> run -> aggregate -> figures -> gate PASS) executed under
+# exactly these versions, incl. scikit_posthocs.critical_difference_diagram.
+#
+# Install (inside .venv):
+#   pip uninstall -y numpy scipy pandas matplotlib scikit-posthocs
+#   pip install -r requirements.txt
+nats_bench==1.8
+numpy==1.26.4
+scipy==1.13.1
+pandas==2.2.3
+matplotlib==3.9.4
+scikit-posthocs==0.14.0
+PyYAML==6.0.3
