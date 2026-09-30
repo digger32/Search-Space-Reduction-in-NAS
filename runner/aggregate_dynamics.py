@@ -113,8 +113,10 @@ def replay_metrics(rep_units, algos):
 
 
 def tex_table(ref_m, rep_m):
-    """Table V of the paper. Two-line header keeps it inside one IEEE column."""
+    """Table V of the paper, in the IEEE conference template's table style:
+    caption above, table footnote marked with a letter in a final row."""
     with_replay = rep_m is not None and "re" in rep_m
+    ncol = 6 if with_replay else 4
     cols = "@{}lccc" + ("cc" if with_replay else "") + "@{}"
     h1 = r"Space & Rej. & Found & Distinct"
     h2 = r" & /prop. & by 500 & final"
@@ -124,16 +126,14 @@ def tex_table(ref_m, rep_m):
     cap = (r"\caption{Search dynamics of regularised evolution per space, "
            r"averaged over the three datasets (200 seeds each). Rej./prop.: "
            r"rejected out-of-space attempts per accepted proposal. Found by "
-           r"500: share of runs whose final incumbent is already found by 500 "
-           r"queries. Distinct final: distinct final architectures reached by "
-           r"the 200 runs$^{\dagger}$.")
+           r"500: share of runs whose final incumbent is found by 500 queries. "
+           r"Distinct final: distinct final architectures over the 200 runs.")
     if with_replay:
-        cap += (r" Div.: mean pairwise Hamming distance (0--6) within the "
+        cap += (r" Div.: mean pairwise Hamming distance (0--6) in the "
                 r"population. Unique: distinct architectures evaluated. Both "
-                r"from a replay of every run, verified bit for bit against "
-                r"the reported results.")
-    cap += (r" $^{\dagger}$Random controls are resampled per seed, so their "
-            r"count is not comparable with the fixed spaces.}")
+                r"come from a replay verified bit for bit against the reported "
+                r"runs.")
+    cap += "}"
     lines = [r"\begin{table}[!tb]", cap, r"\label{tab:dynamics}", r"\centering",
              r"\footnotesize", r"\setlength{\tabcolsep}{4pt}",
              r"\begin{tabular}{" + cols + "}", r"\toprule",
@@ -142,10 +142,10 @@ def tex_table(ref_m, rep_m):
         if sp not in ref_m:
             continue
         m = ref_m[sp]
-        dag = r"$^{\dagger}$" if sp.startswith("randM") else ""
+        mark = r"$^{\mathrm{a}}$" if sp.startswith("randM") else ""
         row = (f"{TEX[sp]} & {m['rejected_per_proposal']:.2f} & "
                f"{m[f'found_final_by_{CONVERGE_AT}']:.2f} & "
-               f"{m['distinct_final_archs']:.1f}{dag}")
+               f"{m['distinct_final_archs']:.1f}{mark}")
         if with_replay:
             r = rep_m["re"][sp]
             row += (f" & {r['pop_hamming']['1000']:.2f} & "
@@ -153,7 +153,11 @@ def tex_table(ref_m, rep_m):
         lines.append(row + r" \\")
         if sp == "param50":
             lines.append(r"\midrule")
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}", ""]
+    lines += [r"\bottomrule",
+              r"\multicolumn{" + str(ncol) + r"}{@{}p{0.97\columnwidth}@{}}{"
+              r"$^{\mathrm{a}}$Random controls are resampled per seed, so this "
+              r"count is not comparable with the fixed spaces.}",
+              r"\end{tabular}", r"\end{table}", ""]
     return "\n".join(lines)
 
 

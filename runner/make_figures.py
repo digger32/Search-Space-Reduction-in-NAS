@@ -34,9 +34,16 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
+# IEEE conference template: "Use 8 point Times New Roman for Figure labels".
+# The first available Times-compatible face is used (Times New Roman on most
+# systems, TeX Gyre Termes / Liberation Serif as metric-compatible fallbacks).
 plt.rcParams.update({
+    "font.family": "serif",
+    "font.serif": ["Times New Roman", "Liberation Serif", "Times",
+                   "TeX Gyre Termes", "Nimbus Roman", "DejaVu Serif"],
+    "mathtext.fontset": "stix",
     "font.size": 8, "axes.titlesize": 8, "axes.labelsize": 8,
-    "xtick.labelsize": 7, "ytick.labelsize": 7, "legend.fontsize": 7,
+    "xtick.labelsize": 8, "ytick.labelsize": 8, "legend.fontsize": 8,
     "pdf.fonttype": 42, "ps.fonttype": 42,
 })
 
@@ -124,9 +131,9 @@ def fig_anytime(rows, figdir):
                     _draw_space(ax, c, sp, rng, 1.4)
             ax.set_xscale("log")
             ax.set_title(ALGO_LABEL.get(al, al))
-            ax.set_xlabel("queries")
-        axes[0].set_ylabel("best test accuracy (%)")
-        axes[-1].legend(fontsize=6, frameon=False)
+            ax.set_xlabel("Budget (queries)")
+        axes[0].set_ylabel("Best test accuracy (%)")
+        axes[-1].legend(fontsize=8, frameon=False)
         fig.suptitle(ds)
         fig.tight_layout()
         fig.savefig(figdir / f"anytime_{ds}.pdf")
@@ -146,13 +153,13 @@ def fig_anytime(rows, figdir):
             if r == 0:
                 ax.set_title(ALGO_LABEL.get(al, al))
             if r == len(datasets) - 1:
-                ax.set_xlabel("queries")
+                ax.set_xlabel("Budget (queries)")
             if c_i == 0:
-                ax.set_ylabel(f"{ds}\ntest acc. (%)", fontsize=7)
-            ax.tick_params(labelsize=6.5)
+                ax.set_ylabel(f"{ds}\nTest accuracy (%)", fontsize=8)
+            ax.tick_params(labelsize=8)
     handles, labels = axes[0, 0].get_legend_handles_labels()
     fig.legend(handles, labels, ncol=len(labels), loc="upper center",
-               bbox_to_anchor=(0.5, 1.02), frameon=False, fontsize=7)
+               bbox_to_anchor=(0.5, 1.02), frameon=False, fontsize=8)
     fig.tight_layout(rect=(0, 0, 1, 0.95))
     fig.savefig(figdir / "anytime_grid.pdf", bbox_inches="tight")
     plt.close(fig)
@@ -173,8 +180,8 @@ def fig_cd(outdir, figdir):
     pmat = pd.DataFrame(ph["p_matrix"], index=names, columns=names)
     fig, ax = plt.subplots(figsize=(3.5, 1.7))
     sp_ph.critical_difference_diagram(ranks, pmat, ax=ax,
-                                      label_props={"fontsize": 7})
-    ax.tick_params(labelsize=7)
+                                      label_props={"fontsize": 8})
+    ax.tick_params(labelsize=8)
     fig.tight_layout()
     fig.savefig(figdir / "cd_spaces.pdf")
     plt.close(fig)
@@ -211,8 +218,8 @@ def fig_effect_heatmap(outdir, figdir):
     vmax = np.nanmax(np.abs(mat)) or 1.0
     im = ax.imshow(mat, cmap="PuOr", vmin=-vmax, vmax=vmax, aspect="auto")
     ax.set_xticks(range(len(reds)), [SPACE_LABEL.get(r, r) for r in reds],
-                  rotation=30, ha="right", fontsize=7)
-    ax.set_yticks(range(len(cells)), row_labels, fontsize=6.5)
+                  rotation=30, ha="right", fontsize=8)
+    ax.set_yticks(range(len(cells)), row_labels, fontsize=8)
     for i in range(len(cells)):
         for j in range(len(reds)):
             if stars[i, j]:
@@ -220,8 +227,8 @@ def fig_effect_heatmap(outdir, figdir):
                 ax.text(j, i, "*", ha="center", va="center", fontsize=8,
                         color="white" if dark else "black")
     cb = fig.colorbar(im)
-    cb.set_label("mean Δ (pp), reduction − control", fontsize=7)
-    cb.ax.tick_params(labelsize=6.5)
+    cb.set_label("Mean paired difference\n(percentage points)", fontsize=8)
+    cb.ax.tick_params(labelsize=8)
     fig.tight_layout()
     fig.savefig(figdir / "effect_heatmap.pdf", bbox_inches="tight")
     plt.close(fig)
@@ -241,7 +248,7 @@ def fig_budget_alloc(rows, figdir):
     tokens = ordered({t for d in frac.values() for t in d}, REDUCTION_ORDER)
     x = np.arange(len(tokens))
     width = 0.8 / max(len(datasets), 1)
-    fig, ax = plt.subplots(figsize=(3.5, 2.0))
+    fig, ax = plt.subplots(figsize=(3.5, 2.45))
     for k, ds in enumerate(datasets):
         vals = [np.mean(frac[ds].get(t, [np.nan])) for t in tokens]
         ax.bar(x + k * width, vals, width, label=ds,
@@ -254,14 +261,16 @@ def fig_budget_alloc(rows, figdir):
                       colors="black", linestyles="dashed", linewidth=0.9,
                       label="size share" if i == 0 else None, zorder=3)
     ax.set_xticks(x + width * (len(datasets) - 1) / 2,
-                  [SPACE_LABEL.get(t, t) for t in tokens], fontsize=6.3)
-    ax.set_ylabel("best-trajectory fraction\ninside region", fontsize=7)
+                  [SPACE_LABEL.get(t, t) for t in tokens], fontsize=8,
+                  rotation=15, ha="right", rotation_mode="anchor")
+    ax.set_xlabel("Informed reduction")
+    ax.set_ylabel("Fraction of best trajectory\ninside region", fontsize=8)
     ax.set_ylim(0, 1.0)
-    ax.legend(fontsize=6.5, frameon=False, ncol=len(datasets) + 1,
+    ax.legend(fontsize=8, frameon=False, ncol=2,
               loc="lower center", bbox_to_anchor=(0.5, 1.02),
-              handlelength=1.6, columnspacing=1.0)
+              handlelength=1.6, columnspacing=1.2)
     fig.tight_layout()
-    fig.savefig(figdir / "budget_alloc.pdf")
+    fig.savefig(figdir / "budget_alloc.pdf", bbox_inches="tight")
     plt.close(fig)
 
 
@@ -307,12 +316,12 @@ def fig_advantage(rows, figdir):
         ax.axhline(0.0, color="grey", linewidth=0.7, linestyle="--", zorder=0)
         ax.set_xscale("log")
         ax.set_title(ALGO_LABEL.get(al, al))
-        ax.set_xlabel("queries")
-        ax.tick_params(labelsize=6.5)
-    axes[0].set_ylabel("paired advantage (pp)", fontsize=7)
+        ax.set_xlabel("Budget (queries)")
+        ax.tick_params(labelsize=8)
+    axes[0].set_ylabel("Paired advantage\n(percentage points)", fontsize=8)
     handles, labels = axes[0].get_legend_handles_labels()
     fig.legend(handles, labels, ncol=len(labels), loc="upper center",
-               bbox_to_anchor=(0.5, 1.06), frameon=False, fontsize=7)
+               bbox_to_anchor=(0.5, 1.06), frameon=False, fontsize=8)
     fig.tight_layout(rect=(0, 0, 1, 0.93))
     fig.savefig(figdir / "advantage_vs_budget.pdf", bbox_inches="tight")
     plt.close(fig)
