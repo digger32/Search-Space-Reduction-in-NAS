@@ -1,0 +1,11 @@
+{
+  "ref_dir": "<repo>/runner/runs/final_20260718_1728",
+  "algos": [
+    "re"
+  ],
+  "n_units": 168,
+  "backend": "nats",
+  "started": "2026-09-30T09:09:37.307885+00:00",
+  "jobs": 16,
+  "no_resume": false
+}

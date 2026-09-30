@@ -1,0 +1,22 @@
+\begin{table}[!tb]
+\caption{Search dynamics of regularised evolution per space, averaged over the three datasets (200 seeds each). Rej./prop.: rejected out-of-space attempts per accepted proposal. Found by 500: share of runs whose final incumbent is already found by 500 queries. Distinct final: distinct final architectures reached by the 200 runs$^{\dagger}$. Div.: mean pairwise Hamming distance (0--6) within the population. Unique: distinct architectures evaluated. Both from a replay of every run, verified bit for bit against the reported results. $^{\dagger}$Random controls are resampled per seed, so their count is not comparable with the fixed spaces.}
+\label{tab:dynamics}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Space & Rej. & Found & Distinct & Div. & Unique \\
+ & /prop. & by 500 & final & @1{,}000 & @1{,}000 \\
+\midrule
+\textsc{full} & 0.25 & 0.54 & 10.0 & 2.89 & 768 \\
+\textsc{no-none} & 0.66 & 0.67 & 5.7 & 2.77 & 600 \\
+\textsc{synflow-50} & 0.37 & 0.57 & 7.3 & 2.83 & 716 \\
+\textsc{naswot-50} & 0.42 & 0.58 & 8.0 & 2.85 & 694 \\
+\textsc{param-50} & 0.37 & 0.59 & 8.3 & 2.84 & 722 \\
+\midrule
+\textsc{rand-4096} & 3.73 & 0.68 & 23.7$^{\dagger}$ & 2.42 & 316 \\
+\textsc{rand-7813} & 1.49 & 0.61 & 14.3$^{\dagger}$ & 2.72 & 572 \\
+\bottomrule
+\end{tabular}
+\end{table}
